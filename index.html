@@ -1,541 +1,425 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AndroidManifest — com.zenith.tv</title>
-  <style>
-    :root {
-      --bg: #0b1020;
-      --card: #131a2e;
-      --card-2: #0f1528;
-      --text: #e8ecf8;
-      --muted: #9aa6c3;
-      --line: #263150;
-      --accent: #7cc4ff;
-      --accent-2: #9ef0c1;
-      --warn: #ffd479;
-      --danger: #ff8f9c;
-      --radius: 18px;
-      --shadow: 0 18px 50px rgba(0, 0, 0, .35);
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zenith TV — APK tipo Magis</title>
+<style>
+  :root{
+    --bg:#0a0616;
+    --bg2:#120a26;
+    --card:#170d2e;
+    --card2:#1e1240;
+    --line:#32215c;
+    --text:#f2eefc;
+    --muted:#a99ac9;
+    --purple:#8b5cf6;
+    --purple2:#a78bfa;
+    --green:#34d399;
+    --cyan:#22d3ee;
+    --pink:#f472b6;
+    --radius:18px;
+    --shadow:0 20px 60px rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(900px 500px at 0% -10%,rgba(139,92,246,.30),transparent 60%),
+      radial-gradient(700px 500px at 100% 0%,rgba(34,211,238,.14),transparent 55%),
+      radial-gradient(600px 400px at 50% 110%,rgba(244,114,182,.12),transparent 60%),
+      linear-gradient(180deg,var(--bg),var(--bg2));
+    min-height:100vh;
+    line-height:1.55;
+  }
+  a{color:var(--purple2)}
+  .wrap{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:22px 0 70px}
 
-    * { box-sizing: border-box; }
+  /* top bar */
+  .topbar{
+    position:sticky;top:0;z-index:20;
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:12px 16px;margin-bottom:20px;
+    border:1px solid var(--line);border-radius:16px;
+    background:rgba(18,10,38,.72);backdrop-filter:blur(12px);
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
+  .brand .dot{
+    width:34px;height:34px;border-radius:11px;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--purple),var(--cyan));
+    box-shadow:0 8px 24px rgba(139,92,246,.45);
+    font-size:18px;
+  }
+  .brand span small{display:block;font-size:.68rem;font-weight:600;color:var(--muted);letter-spacing:.18em}
+  .topbar .btn{white-space:nowrap}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(900px 500px at 10% -10%, rgba(124, 196, 255, .18), transparent 60%),
-        radial-gradient(700px 450px at 100% 0%, rgba(158, 240, 193, .12), transparent 55%),
-        var(--bg);
-      line-height: 1.5;
-    }
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 16px;border-radius:12px;border:1px solid transparent;
+    font-weight:700;font-size:.92rem;cursor:pointer;text-decoration:none;
+    transition:transform .15s ease,box-shadow .15s ease,background .15s ease;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{
+    color:#0b0418;
+    background:linear-gradient(135deg,var(--green),var(--cyan));
+    box-shadow:0 14px 30px rgba(52,211,153,.28);
+  }
+  .btn-primary:hover{box-shadow:0 18px 40px rgba(52,211,153,.4)}
+  .btn-ghost{
+    color:var(--text);background:rgba(255,255,255,.04);
+    border-color:var(--line);
+  }
+  .btn-ghost:hover{background:rgba(255,255,255,.08)}
 
-    .wrap {
-      width: min(1180px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 40px 0 64px;
-    }
+  /* hero */
+  .hero{
+    display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;
+    padding:22px;border:1px solid var(--line);border-radius:calc(var(--radius) + 6px);
+    background:linear-gradient(135deg,rgba(139,92,246,.16),rgba(34,211,238,.06)),var(--card);
+    box-shadow:var(--shadow);
+  }
+  .appicon{
+    width:96px;height:96px;border-radius:24px;flex:0 0 auto;
+    display:grid;place-items:center;font-size:42px;
+    background:linear-gradient(135deg,#2a1660,#0f3a52);
+    border:1px solid var(--line);
+    box-shadow:inset 0 0 40px rgba(139,92,246,.35),0 18px 40px rgba(0,0,0,.5);
+  }
+  .hero h1{margin:0;font-size:clamp(1.5rem,3.4vw,2.3rem);letter-spacing:-.02em}
+  .hero p{margin:6px 0 0;color:var(--muted);font-size:.94rem}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:5px 10px;border-radius:999px;font-size:.78rem;font-weight:700;
+    border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);
+  }
+  .tag.green{color:#062018;background:var(--green);border-color:transparent}
+  .tag.cyan{color:#041a24;background:var(--cyan);border-color:transparent}
+  .tag.purple{color:#f4efff;background:rgba(139,92,246,.28);border-color:rgba(139,92,246,.6)}
+  .hero-cta{display:grid;gap:10px;justify-items:stretch;min-width:200px}
+  .hero-cta small{color:var(--muted);text-align:center;font-size:.74rem}
 
-    header.hero {
-      display: grid;
-      gap: 18px;
-      padding: 28px;
-      border: 1px solid var(--line);
-      border-radius: calc(var(--radius) + 8px);
-      background: linear-gradient(135deg, rgba(124, 196, 255, .10), rgba(158, 240, 193, .05)), var(--card);
-      box-shadow: var(--shadow);
-    }
+  /* grid */
+  .grid{display:grid;gap:16px;margin-top:16px}
+  .cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card{
+    border:1px solid var(--line);border-radius:var(--radius);
+    background:linear-gradient(180deg,rgba(255,255,255,.03),transparent),var(--card);
+    box-shadow:var(--shadow);overflow:hidden;
+  }
+  .card-head{padding:16px 18px 12px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.015)}
+  .card-head h2{margin:0;font-size:1rem}
+  .card-head p{margin:3px 0 0;font-size:.8rem;color:var(--muted)}
+  .card-body{padding:16px 18px 18px}
 
-    .eyebrow {
-      color: var(--accent);
-      font-size: .82rem;
-      font-weight: 700;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-    }
+  .spec{display:grid;gap:6px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card2)}
+  .spec + .spec{margin-top:10px}
+  .spec .k{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:800}
+  .spec .v{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.95rem;word-break:break-word}
 
-    h1 {
-      margin: 0;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      line-height: 1.1;
-      letter-spacing: -.03em;
-    }
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    padding:6px 10px;border-radius:999px;border:1px solid var(--line);
+    background:var(--card2);font-size:.8rem;color:var(--text);
+  }
+  .chip b{color:var(--purple2)}
 
-    h1 code {
-      font-size: .92em;
-      color: var(--accent-2);
-    }
+  /* code */
+  .codebox{position:relative}
+  .codebox pre{
+    margin:0;padding:16px 16px 18px;max-height:520px;overflow:auto;
+    background:#0c0720;border-top:1px solid var(--line);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:.82rem;line-height:1.55;color:#d9d0ff;
+  }
+  .codebox pre::-webkit-scrollbar{width:10px;height:10px}
+  .codebox pre::-webkit-scrollbar-thumb{background:#3a2a6b;border-radius:10px}
+  .copy{
+    position:absolute;top:10px;right:10px;z-index:2;
+    padding:7px 11px;border-radius:9px;font-size:.76rem;font-weight:800;cursor:pointer;
+    color:var(--text);background:rgba(139,92,246,.28);border:1px solid rgba(139,92,246,.6);
+  }
+  .copy:hover{background:rgba(139,92,246,.45)}
+  .copy.ok{background:var(--green);color:#062018;border-color:transparent}
 
-    .subtitle {
-      margin: 0;
-      max-width: 78ch;
-      color: var(--muted);
-    }
+  .note{
+    margin-top:16px;padding:14px 16px;border-radius:14px;font-size:.86rem;
+    border:1px solid rgba(244,114,182,.4);background:rgba(244,114,182,.08);color:#ffd9ec;
+  }
 
-    .badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:.8rem}
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 11px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, .035);
-      color: var(--text);
-      font-size: .84rem;
-      white-space: nowrap;
-    }
-
-    .badge strong { color: var(--accent); }
-
-    .grid {
-      display: grid;
-      gap: 18px;
-      margin-top: 22px;
-    }
-
-    .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-
-    .card {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255,255,255,.025), transparent), var(--card);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .card .card-head {
-      padding: 18px 20px 14px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255, 255, 255, .015);
-    }
-
-    .card h2 {
-      margin: 0;
-      font-size: 1.02rem;
-      letter-spacing: .01em;
-    }
-
-    .card .hint {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: .84rem;
-    }
-
-    .card .card-body { padding: 18px 20px 20px; }
-
-    .kpi {
-      display: grid;
-      gap: 4px;
-      padding: 14px 16px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: var(--card-2);
-    }
-
-    .kpi .label {
-      color: var(--muted);
-      font-size: .76rem;
-      text-transform: uppercase;
-      letter-spacing: .09em;
-      font-weight: 700;
-    }
-
-    .kpi .value {
-      font-size: 1.05rem;
-      font-weight: 700;
-      word-break: break-word;
-    }
-
-    .kpi .value.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: .9rem;
-    }
-
-    th, td {
-      padding: 11px 10px;
-      text-align: left;
-      vertical-align: top;
-      border-bottom: 1px solid rgba(38, 49, 80, .75);
-    }
-
-    th {
-      color: var(--muted);
-      font-size: .74rem;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-    }
-
-    tr:last-child td { border-bottom: 0; }
-
-    code, .mono {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    }
-
-    code {
-      padding: 1px 6px;
-      border: 1px solid var(--line);
-      border-radius: 7px;
-      background: rgba(255, 255, 255, .04);
-      font-size: .88em;
-    }
-
-    .pill {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-size: .76rem;
-      font-weight: 700;
-      border: 1px solid transparent;
-      white-space: nowrap;
-    }
-
-    .pill.ok { color: #062016; background: var(--accent-2); }
-    .pill.no { color: #2b0710; background: var(--danger); }
-    .pill.warn { color: #2a1c00; background: var(--warn); }
-    .pill.info { color: #041a2a; background: var(--accent); }
-
-    ul.clean {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: grid;
-      gap: 9px;
-    }
-
-    ul.clean li {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      padding: 10px 12px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--card-2);
-    }
-
-    ul.clean li::before {
-      content: "";
-      flex: 0 0 auto;
-      width: 8px;
-      height: 8px;
-      margin-top: .5em;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 4px rgba(124, 196, 255, .12);
-    }
-
-    .note {
-      margin-top: 22px;
-      padding: 16px 18px;
-      border: 1px solid rgba(255, 212, 121, .35);
-      border-radius: 14px;
-      background: rgba(255, 212, 121, .07);
-      color: #ffe9b8;
-      font-size: .9rem;
-    }
-
-    footer {
-      margin-top: 28px;
-      color: var(--muted);
-      font-size: .82rem;
-      text-align: center;
-    }
-
-    @media (max-width: 900px) {
-      .grid.cols-3 { grid-template-columns: 1fr; }
-      .grid.cols-2 { grid-template-columns: 1fr; }
-      .wrap { padding-top: 24px; }
-      header.hero { padding: 22px; }
-    }
-  </style>
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr;text-align:left}
+    .appicon{width:76px;height:76px;font-size:34px;border-radius:20px}
+    .cols-3,.cols-2{grid-template-columns:1fr}
+    .topbar .btn span.hide{display:none}
+  }
+</style>
 </head>
 <body>
-  <main class="wrap">
-    <header class="hero">
-      <div class="eyebrow">Android Manifest / Kotlin Tooling</div>
-      <h1>Resumen de <code>com.zenith.tv</code></h1>
-      <p class="subtitle">
-        El archivo <strong>AndroidManifest.xml</strong> estaba en formato binario AXML. Este HTML muestra los datos legibles
-        más relevantes: paquete, versión, permisos, componentes, features y metadata de Kotlin/Gradle.
-      </p>
-      <div class="badges">
-        <span class="badge"><strong>Package</strong> com.zenith.tv</span>
-        <span class="badge"><strong>versionName</strong> 1.0.0</span>
-        <span class="badge"><strong>versionCode</strong> 17</span>
-        <span class="badge"><strong>Kotlin</strong> 2.4.10</span>
-        <span class="badge"><strong>Gradle</strong> 9.7.0</span>
-        <span class="badge"><strong>Java</strong> 17</span>
-      </div>
-    </header>
+<div class="wrap">
 
-    <section class="grid cols-3" aria-label="Datos principales">
-      <article class="card">
-        <div class="card-head">
-          <h2>Aplicación</h2>
-          <p class="hint">Identidad y versionado</p>
-        </div>
-        <div class="card-body">
-          <div class="kpi">
-            <div class="label">Package</div>
-            <div class="value mono">com.zenith.tv</div>
-          </div>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="card-head">
-          <h2>Versión</h2>
-          <p class="hint">Datos extraídos del manifiesto</p>
-        </div>
-        <div class="card-body grid" style="gap:12px">
-          <div class="kpi">
-            <div class="label">versionName</div>
-            <div class="value mono">1.0.0</div>
-          </div>
-          <div class="kpi">
-            <div class="label">versionCode</div>
-            <div class="value mono">17</div>
-          </div>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="card-head">
-          <h2>Build</h2>
-          <p class="hint">Kotlin Tooling Metadata</p>
-        </div>
-        <div class="card-body grid" style="gap:12px">
-          <div class="kpi">
-            <div class="label">Gradle</div>
-            <div class="value mono">9.7.0</div>
-          </div>
-          <div class="kpi">
-            <div class="label">Kotlin Android Plugin</div>
-            <div class="value mono">2.4.10</div>
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <section class="grid cols-2" aria-label="Permisos y features">
-      <article class="card">
-        <div class="card-head">
-          <h2>Permisos declarados</h2>
-          <p class="hint">uses-permission y permiso custom</p>
-        </div>
-        <div class="card-body">
-          <table>
-            <thead>
-              <tr>
-                <th>Permiso</th>
-                <th>Tipo / nota</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>android.permission.ACCESS_NETWORK_STATE</code></td>
-                <td><span class="pill info">normal</span></td>
-              </tr>
-              <tr>
-                <td><code>android.permission.ACCESS_WIFI_STATE</code></td>
-                <td><span class="pill info">normal</span></td>
-              </tr>
-              <tr>
-                <td><code>android.permission.DUMP</code></td>
-                <td><span class="pill warn">protección</span></td>
-              </tr>
-              <tr>
-                <td><code>android.permission.INTERNET</code></td>
-                <td><span class="pill info">normal</span></td>
-              </tr>
-              <tr>
-                <td><code>android.permission.REQUEST_INSTALL_PACKAGES</code></td>
-                <td><span class="pill warn">especial</span></td>
-              </tr>
-              <tr>
-                <td><code>android.permission.WAKE_LOCK</code></td>
-                <td><span class="pill info">normal</span></td>
-              </tr>
-              <tr>
-                <td><code>com.zenith.tv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION</code></td>
-                <td><span class="pill warn">protectionLevel: signature</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="card-head">
-          <h2>Uses-feature</h2>
-          <p class="hint">Hardware / software requerido o declarado</p>
-        </div>
-        <div class="card-body">
-          <ul class="clean">
-            <li><code>android.hardware.touchscreen</code> <span class="pill warn">required: false</span></li>
-            <li><code>android.hardware.wifi</code></li>
-            <li><code>android.software.leanback</code> <span class="pill warn">TV / Leanback</span></li>
-          </ul>
-        </div>
-      </article>
-    </section>
-
-    <section class="grid" aria-label="Componentes">
-      <article class="card">
-        <div class="card-head">
-          <h2>Componentes declarados</h2>
-          <p class="hint">Activities, providers, receivers y metadata</p>
-        </div>
-        <div class="card-body">
-          <table>
-            <thead>
-              <tr>
-                <th>Componente</th>
-                <th>Tipo</th>
-                <th>exported</th>
-                <th>Detalles</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>com.zenith.tv.MainActivity</code></td>
-                <td><span class="pill info">activity</span></td>
-                <td><span class="pill ok">true</span></td>
-                <td>
-                  Intent filters: <code>MAIN</code>, <code>LAUNCHER</code>, <code>LEANBACK_LAUNCHER</code>
-                </td>
-              </tr>
-              <tr>
-                <td><code>androidx.core.content.FileProvider</code></td>
-                <td><span class="pill info">provider</span></td>
-                <td><span class="pill no">false</span></td>
-                <td>
-                  authorities: <code>com.zenith.tv.fileprovider</code><br />
-                  grantUriPermissions: <span class="pill ok">true</span><br />
-                  meta-data: <code>android.support.FILE_PROVIDER_PATHS</code>
-                </td>
-              </tr>
-              <tr>
-                <td><code>androidx.startup.InitializationProvider</code></td>
-                <td><span class="pill info">provider</span></td>
-                <td><span class="pill no">false</span></td>
-                <td>
-                  authorities: <code>com.zenith.tv.androidx-startup</code><br />
-                  Initializers: <code>EmojiCompatInitializer</code>,
-                  <code>ProcessLifecycleInitializer</code>,
-                  <code>ProfileInstallerInitializer</code>
-                </td>
-              </tr>
-              <tr>
-                <td><code>androidx.profileinstaller.ProfileInstallReceiver</code></td>
-                <td><span class="pill info">receiver</span></td>
-                <td><span class="pill ok">true</span></td>
-                <td>
-                  permission: <code>android.permission.DUMP</code><br />
-                  Acciones: <code>INSTALL_PROFILE</code>, <code>SAVE_PROFILE</code>,
-                  <code>SKIP_FILE</code>, <code>BENCHMARK_OPERATION</code>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </article>
-    </section>
-
-    <section class="grid cols-2" aria-label="Metadata Kotlin y notas">
-      <article class="card">
-        <div class="card-head">
-          <h2>Kotlin Tooling Metadata</h2>
-          <p class="hint">kotlin-tooling-metadata.json</p>
-        </div>
-        <div class="card-body">
-          <table>
-            <tbody>
-              <tr>
-                <th>schemaVersion</th>
-                <td><code>1.1.0</code></td>
-              </tr>
-              <tr>
-                <th>buildSystem</th>
-                <td><code>Gradle</code></td>
-              </tr>
-              <tr>
-                <th>buildSystemVersion</th>
-                <td><code>9.7.0</code></td>
-              </tr>
-              <tr>
-                <th>buildPlugin</th>
-                <td><code>org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper</code></td>
-              </tr>
-              <tr>
-                <th>buildPluginVersion</th>
-                <td><code>2.4.10</code></td>
-              </tr>
-              <tr>
-                <th>target</th>
-                <td><code>KotlinAndroidTarget</code> / <code>androidJvm</code></td>
-              </tr>
-              <tr>
-                <th>source / target compatibility</th>
-                <td><code>17</code> / <code>17</code></td>
-              </tr>
-              <tr>
-                <th>isHmppEnabled</th>
-                <td><span class="pill ok">true</span></td>
-              </tr>
-              <tr>
-                <th>isCompatibilityMetadataVariantEnabled</th>
-                <td><span class="pill no">false</span></td>
-              </tr>
-              <tr>
-                <th>isKPMEnabled</th>
-                <td><span class="pill no">false</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="card-head">
-          <h2>Lectura rápida</h2>
-          <p class="hint">Resumen funcional</p>
-        </div>
-        <div class="card-body">
-          <ul class="clean">
-            <li>App Android con paquete <code>com.zenith.tv</code>.</li>
-            <li>Actividad principal lanzable desde Launcher y Leanback Launcher, orientada a TV/Android TV.</li>
-            <li>Usa red, Wi-Fi, WakeLock y solicitud de instalación de paquetes.</li>
-            <li>Incluye <code>FileProvider</code> para compartir archivos vía URIs.</li>
-            <li>Integra AndroidX Startup, Emoji2, ProcessLifecycle y ProfileInstaller.</li>
-            <li>Build con Java 17 y Kotlin 2.4.10 sobre Gradle 9.7.0.</li>
-          </ul>
-        </div>
-      </article>
-    </section>
-
-    <div class="note">
-      <strong>Nota:</strong> el <code>AndroidManifest.xml</code> original estaba en formato binario AXML. Algunos atributos
-      numéricos internos (por ejemplo ciertos flags de <code>configChanges</code> o valores de SDK) no se muestran porque
-      requieren decodificación AXML completa. Este HTML resume lo que pudo extraerse de forma legible.
+  <div class="topbar">
+    <div class="brand">
+      <div class="dot">▶</div>
+      <span>ZENITH TV <small>APK TIPO MAGIS</small></span>
     </div>
+    <a class="btn btn-ghost" href="#manifest">📄 Ver Manifest</a>
+  </div>
 
-    <footer>
-      Generado a partir de AndroidManifest.xml + kotlin-tooling-metadata.json
-    </footer>
-  </main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="appicon">📺</div>
+    <div>
+      <h1>Zenith TV</h1>
+      <p>App IPTV / streaming estilo Magis TV · Android TV + móvil · Leanback</p>
+      <div class="meta">
+        <span class="tag purple">v1.0.0 (17)</span>
+        <span class="tag">com.zenith.tv</span>
+        <span class="tag cyan">Android TV</span>
+        <span class="tag green">minSdk 24</span>
+        <span class="tag">targetSdk 37</span>
+        <span class="tag">Java 17</span>
+      </div>
+    </div>
+    <div class="hero-cta">
+      <button class="btn btn-primary" type="button">⬇ Instalar APK</button>
+      <button class="btn btn-ghost" type="button" onclick="document.getElementById('manifest').scrollIntoView({behavior:'smooth'})">📄 Ver código</button>
+      <small>Demo · sin descarga real</small>
+    </div>
+  </section>
+
+  <!-- SPECS -->
+  <section class="grid cols-3">
+    <article class="card">
+      <div class="card-head"><h2>Aplicación</h2><p>Identidad del paquete</p></div>
+      <div class="card-body">
+        <div class="spec"><div class="k">package</div><div class="v">com.zenith.tv</div></div>
+        <div class="spec"><div class="k">versionName</div><div class="v">1.0.0</div></div>
+        <div class="spec"><div class="k">versionCode</div><div class="v">17</div></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head"><h2>SDK / Build</h2><p>Compatibilidad</p></div>
+      <div class="card-body">
+        <div class="spec"><div class="k">minSdkVersion</div><div class="v">24 (Android 7.0)</div></div>
+        <div class="spec"><div class="k">targetSdkVersion</div><div class="v">37</div></div>
+        <div class="spec"><div class="k">Java compatibility</div><div class="v">17 / 17</div></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head"><h2>Kotlin Tooling</h2><p>Gradle metadata</p></div>
+      <div class="card-body">
+        <div class="spec"><div class="k">Gradle</div><div class="v">9.7.0</div></div>
+        <div class="spec"><div class="k">Kotlin Android Plugin</div><div class="v">2.4.10</div></div>
+        <div class="spec"><div class="k">target</div><div class="v">androidJvm</div></div>
+      </div>
+    </article>
+  </section>
+
+  <!-- FEATURES + PERMISOS -->
+  <section class="grid cols-2">
+    <article class="card">
+      <div class="card-head"><h2>Uses-feature</h2><p>Hardware / software</p></div>
+      <div class="card-body">
+        <div class="chips">
+          <span class="chip"><b>touchscreen</b> · required=false</span>
+          <span class="chip"><b>wifi</b></span>
+          <span class="chip"><b>leanback</b> · TV</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head"><h2>Permisos</h2><p>uses-permission</p></div>
+      <div class="card-body">
+        <div class="chips">
+          <span class="chip">INTERNET</span>
+          <span class="chip">ACCESS_NETWORK_STATE</span>
+          <span class="chip">ACCESS_WIFI_STATE</span>
+          <span class="chip">WAKE_LOCK</span>
+          <span class="chip">REQUEST_INSTALL_PACKAGES</span>
+          <span class="chip">DUMP</span>
+          <span class="chip"><b>DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION</b> · signature</span>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- COMPONENTES -->
+  <section class="grid cols-2">
+    <article class="card">
+      <div class="card-head"><h2>MainActivity</h2><p>Activity principal</p></div>
+      <div class="card-body">
+        <div class="spec"><div class="k">name</div><div class="v">com.zenith.tv.MainActivity</div></div>
+        <div class="spec"><div class="k">exported</div><div class="v">true</div></div>
+        <div class="spec"><div class="k">intent-filter</div><div class="v">MAIN · LAUNCHER · LEANBACK_LAUNCHER</div></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head"><h2>Providers / Receivers</h2><p>AndroidX</p></div>
+      <div class="card-body">
+        <div class="spec"><div class="k">FileProvider</div><div class="v">com.zenith.tv.fileprovider</div></div>
+        <div class="spec"><div class="k">Startup</div><div class="v">com.zenith.tv.androidx-startup</div></div>
+        <div class="spec"><div class="k">Receiver</div><div class="v">ProfileInstallReceiver · DUMP</div></div>
+      </div>
+    </article>
+  </section>
+
+  <!-- MANIFEST CODE -->
+  <section class="card" id="manifest" style="margin-top:16px">
+    <div class="card-head">
+      <h2>AndroidManifest.xml (reconstruido)</h2>
+      <p>Base legible para un APK tipo Magis / IPTV · copiá y ajustá recursos (@string, @mipmap, @xml…)</p>
+    </div>
+    <div class="codebox">
+      <button class="copy" id="copyBtn" type="button">Copiar</button>
+<pre id="manifestCode">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zenith.tv"
+    android:versionCode="17"
+    android:versionName="1.0.0"
+    android:compileSdkVersion="37"
+    android:compileSdkVersionCodename="17"
+    platformBuildVersionCode="37"
+    platformBuildVersionName="17"&gt;
+
+    &lt;uses-sdk
+        android:minSdkVersion="24"
+        android:targetSdkVersion="37" /&gt;
+
+    &lt;!-- Hardware / TV --&gt;
+    &lt;uses-feature android:name="android.hardware.touchscreen" android:required="false" /&gt;
+    &lt;uses-feature android:name="android.hardware.wifi" android:required="false" /&gt;
+    &lt;uses-feature android:name="android.software.leanback" android:required="false" /&gt;
+
+    &lt;!-- Permisos --&gt;
+    &lt;uses-permission android:name="android.permission.INTERNET" /&gt;
+    &lt;uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /&gt;
+    &lt;uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /&gt;
+    &lt;uses-permission android:name="android.permission.WAKE_LOCK" /&gt;
+    &lt;uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /&gt;
+    &lt;uses-permission android:name="android.permission.DUMP" /&gt;
+
+    &lt;!-- Permiso interno (receiver dinámico no exportado) --&gt;
+    &lt;permission
+        android:name="com.zenith.tv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:protectionLevel="signature" /&gt;
+    &lt;uses-permission
+        android:name="com.zenith.tv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" /&gt;
+
+    &lt;application
+        android:allowBackup="true"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+        android:banner="@drawable/tv_banner"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:extractNativeLibs="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Zenith"
+        android:usesCleartextTraffic="true"&gt;
+
+        &lt;!-- Pantalla principal --&gt;
+        &lt;activity
+            android:name="com.zenith.tv.MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:screenOrientation="landscape"&gt;
+            &lt;intent-filter&gt;
+                &lt;action android:name="android.intent.action.MAIN" /&gt;
+                &lt;category android:name="android.intent.category.LAUNCHER" /&gt;
+                &lt;category android:name="android.intent.category.LEANBACK_LAUNCHER" /&gt;
+            &lt;/intent-filter&gt;
+        &lt;/activity&gt;
+
+        &lt;!-- FileProvider --&gt;
+        &lt;provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.zenith.tv.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true"&gt;
+            &lt;meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" /&gt;
+        &lt;/provider&gt;
+
+        &lt;!-- AndroidX Startup --&gt;
+        &lt;provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="com.zenith.tv.androidx-startup"
+            android:exported="false"&gt;
+            &lt;meta-data
+                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+                android:value="androidx.startup" /&gt;
+            &lt;meta-data
+                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+                android:value="androidx.startup" /&gt;
+            &lt;meta-data
+                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+                android:value="androidx.startup" /&gt;
+            &lt;meta-data
+                android:name="okhttp3.internal.platform.PlatformInitializer"
+                android:value="androidx.startup" /&gt;
+        &lt;/provider&gt;
+
+        &lt;!-- Profile Installer --&gt;
+        &lt;receiver
+            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+            android:exported="true"
+            android:permission="android.permission.DUMP"&gt;
+            &lt;intent-filter&gt;
+                &lt;action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" /&gt;
+                &lt;action android:name="androidx.profileinstaller.action.SKIP_FILE" /&gt;
+                &lt;action android:name="androidx.profileinstaller.action.SAVE_PROFILE" /&gt;
+                &lt;action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" /&gt;
+            &lt;/intent-filter&gt;
+        &lt;/receiver&gt;
+
+    &lt;/application&gt;
+&lt;/manifest&gt;</pre>
+    </div>
+  </section>
+
+  <div class="note">
+    ⚠️ <b>Importante:</b> este manifest fue reconstruido a partir del <code>AndroidManifest.xml</code> binario (AXML).
+    Algunos valores de recursos (<code>@string/...</code>, <code>@mipmap/...</code>, <code>@xml/...</code>) y flags de
+    <code>configChanges</code> pueden variar. Ajustalos a tu proyecto real antes de compilar.
+    Para un APK tipo Magis/IPTV, sumá: <code>ExoPlayer/Media3</code>, <code>OkHttp</code>, reproductor HLS/DASH y un
+    backend de listas M3U.
+  </div>
+
+  <footer>Zenith TV · HTML demo · Manifest reconstruido desde AXML + kotlin-tooling-metadata.json</footer>
+</div>
+
+<script>
+  const btn = document.getElementById('copyBtn');
+  const code = document.getElementById('manifestCode');
+  btn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(code.textContent);
+      btn.textContent = '¡Copiado!';
+      btn.classList.add('ok');
+      setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('ok'); }, 1600);
+    } catch (e) {
+      const r = document.createRange();
+      r.selectNodeContents(code);
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+      document.execCommand('copy');
+      btn.textContent = '¡Copiado!';
+      setTimeout(() => { btn.textContent = 'Copiar'; }, 1600);
+    }
+  });
+</script>
 </body>
 </html>
