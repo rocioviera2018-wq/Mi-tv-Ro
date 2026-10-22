@@ -3,32 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Argentina TV PRO</title>
-<!-- HLS.js para reproducir streams .m3u8 en celulares -->
+<title>Argentina TV PRO - Premium</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
-:root {
-  --bg: #070a10; --panel: #10151f; --panel2: #151c27; --green: #00c896;
-  --red: #ef3340; --text: #fff; --muted: #8e9aaa; --line: rgba(255,255,255,.08);
-}
+:root { --bg: #070a10; --panel: #10151f; --panel2: #151c27; --green: #00c896; --red: #ef3340; --text: #fff; --muted: #8e9aaa; --line: rgba(255,255,255,.08); }
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
 body { background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
 button { cursor: pointer; font: inherit; }
 .hidden { display: none !important; }
 
-/* Header */
+/* Header & Categorías */
 .header { padding: 20px 16px; background: linear-gradient(145deg,#071016,#0b1720); border-bottom: 1px solid var(--line); }
 .brand { display: flex; align-items: center; gap: 10px; }
 .logo { width: 40px; height: 40px; background: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-.search { margin-top: 15px; }
-.search input { width: 100%; padding: 12px; border-radius: 10px; border: none; background: var(--panel); color: white; }
+.categories { display: flex; gap: 10px; overflow-x: auto; padding: 15px; scrollbar-width: none; }
+.categories::-webkit-scrollbar { display: none; }
+.category { white-space: nowrap; border: 1px solid var(--line); background: var(--panel); color: #aeb8c5; border-radius: 30px; padding: 8px 16px; font-size: 14px; }
+.category.active { background: var(--green); border-color: var(--green); color: white; }
 
 /* Grid Canales */
-.section { padding: 15px; }
-.channels { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.channel { background: var(--panel); border-radius: 15px; padding: 10px; text-align: center; border: 1px solid var(--line); }
-.channelLogo { height: 70px; background: var(--panel2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 25px; margin-bottom: 8px; overflow: hidden; }
-.channelLogo img { width: 100%; height: 100%; object-fit: contain; }
+.section { padding: 0 15px; margin-top: 10px; }
+.channels { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.channel { background: var(--panel); border-radius: 15px; padding: 10px; text-align: center; border: 1px solid var(--line); transition: 0.2s; }
+.channel:active { transform: scale(0.95); }
+.channelLogo { height: 80px; background: var(--panel2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 30px; margin-bottom: 8px; overflow: hidden; }
+.channelLogo img { width: 100%; height: 100%; object-fit: cover; }
 .channelName { font-size: 13px; font-weight: bold; }
 
 /* Player */
@@ -37,6 +36,7 @@ button { cursor: pointer; font: inherit; }
 video { width: 100%; height: 100%; object-fit: contain; }
 .player-info { margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
 .btn-fav { background: var(--panel2); border: none; color: gold; font-size: 24px; padding: 10px; border-radius: 10px; }
+.back-btn { background:none; border:none; color:var(--muted); margin-bottom:10px; font-size: 16px; }
 
 /* Panel Admin */
 .admin { padding: 15px; }
@@ -46,10 +46,11 @@ video { width: 100%; height: 100%; object-fit: contain; }
 .btn-red { background: var(--red); color: white; border: none; padding: 8px; border-radius: 8px; font-size: 12px; }
 
 /* Bottom Nav */
-.bottomNav { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: rgba(9,13,20,.95); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--line); }
+.bottomNav { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: rgba(9,13,20,.95); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--line); z-index: 100; }
 .nav { background: none; border: none; color: var(--muted); display: flex; flex-direction: column; align-items: center; font-size: 10px; gap: 4px; }
 .nav.active { color: var(--green); }
 .nav span { font-size: 20px; }
+@media(min-width:700px){ .channels { grid-template-columns: repeat(4, 1fr); } }
 </style>
 </head>
 <body>
@@ -63,15 +64,24 @@ video { width: 100%; height: 100%; object-fit: contain; }
 </nav>
 
 <script>
-// --- DATOS ---
-const STORAGE_KEY = "arg_tv_v2";
+// --- DATOS INICIALES CON CANALES DE PRUEBA (Streams legales de prueba) ---
+const STORAGE_KEY = "arg_tv_premium_v3";
 let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
   channels: [
-    { id: "1", name: "Ejemplo TV", category: "aire", logo: "📺", stream: "", description: "Canal de prueba" }
+    { id: "1", name: "NASA TV (En Vivo)", category: "canales", logo: "🚀", image: "https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg", stream: "https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-HLS/master.m3u8", description: "Señal oficial de la NASA" },
+    { id: "2", name: "Big Buck Bunny", category: "peliculas", logo: "🐰", image: "", stream: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", description: "Película animada (Prueba HLS)" },
+    { id: "3", name: "Sintel", category: "peliculas", logo: "🐉", image: "", stream: "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8", description: "Corto animado (Prueba HLS)" },
+    { id: "4", name: "Apple Test Stream", category: "series", logo: "🍎", image: "", stream: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8", description: "Prueba de transmisión de Apple" },
+    { id: "5", name: "Música Relajante", category: "musica", logo: "🎵", image: "", stream: "https://test-streams.mux.dev/dai-discontinuity-deltatre/manifest.m3u8", description: "Música y relajación" },
+    { id: "6", name: "Tears of Steel", category: "peliculas", logo: "🤖", image: "", stream: "https://test-streams.mux.dev/pts_shift/master.m3u8", description: "Ciencia ficción (Prueba HLS)" }
   ],
   favorites: []
 };
+
 let currentView = "home";
+let currentCategory = "todos";
+let currentChannelId = null;
+let hlsInstance = null;
 
 function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
 
@@ -79,10 +89,13 @@ function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
 function goTo(view) {
   currentView = view;
   document.querySelectorAll('.nav').forEach(n => n.classList.remove('active'));
-  if(view === 'home') document.getElementById('nav-home').classList.add('active');
-  if(view === 'favorites') document.getElementById('nav-favs').classList.add('active');
-  if(view === 'admin') document.getElementById('nav-admin').classList.add('active');
-  
+  const navBtn = document.getElementById(`nav-${view === 'home' ? 'home' : view === 'favorites' ? 'favs' : 'admin'}`);
+  if(navBtn) navBtn.classList.add('active');
+  render();
+}
+
+function setCategory(cat) {
+  currentCategory = cat;
   render();
 }
 
@@ -97,18 +110,31 @@ function render() {
 
 // --- VISTA INICIO ---
 function renderHome() {
+  let filtered = data.channels;
+  if (currentCategory !== "todos") {
+    filtered = data.channels.filter(c => c.category === currentCategory);
+  }
+
   let html = `
     <header class="header">
       <div class="brand"><div class="logo">📺</div><h1>Argentina TV PRO</h1></div>
     </header>
+    <div class="categories">
+      ${createCatBtn("todos", "Todos")}
+      ${createCatBtn("canales", "📺 Canales")}
+      ${createCatBtn("peliculas", "🍿 Películas")}
+      ${createCatBtn("series", "🎬 Series")}
+      ${createCatBtn("musica", "🎵 Música")}
+    </div>
     <section class="section">
-      <h2>Canales Disponibles</h2>
       <div class="channels">`;
-  
-  data.channels.forEach(c => {
+
+  if(filtered.length === 0) html += `<p style="color:var(--muted); grid-column: span 2;">No hay contenido en esta categoría.</p>`;
+
+  filtered.forEach(c => {
     html += `
       <div class="channel" onclick="openPlayer('${c.id}')">
-        <div class="channelLogo">${c.logo || '📺'}</div>
+        <div class="channelLogo">${c.image ? `<img src="${c.image}">` : c.logo}</div>
         <div class="channelName">${c.name}</div>
       </div>`;
   });
@@ -117,44 +143,40 @@ function renderHome() {
   return html;
 }
 
+function createCatBtn(id, name) {
+  return `<button class="category ${currentCategory === id ? 'active' : ''}" onclick="setCategory('${id}')">${name}</button>`;
+}
+
 // --- VISTA FAVORITOS ---
 function renderFavorites() {
   let favs = data.channels.filter(c => data.favorites.includes(c.id));
-  let html = `<div class="section"><h2>⭐ Mis Favoritos</h2><br>`;
+  let html = `<div class="section" style="padding-top:20px;"><h2>⭐ Mis Favoritos</h2><br><div class="channels">`;
   
   if (favs.length === 0) {
-    html += `<p style="color:var(--muted)">No tenés favoritos guardados.</p>`;
+    html += `<p style="color:var(--muted); grid-column: span 2;">No tenés favoritos guardados.</p>`;
   } else {
-    html += `<div class="channels">`;
     favs.forEach(c => {
       html += `
         <div class="channel" onclick="openPlayer('${c.id}')">
-          <div class="channelLogo">${c.logo || '📺'}</div>
+          <div class="channelLogo">${c.image ? `<img src="${c.image}">` : c.logo}</div>
           <div class="channelName">${c.name}</div>
         </div>`;
     });
-    html += `</div>`;
   }
-  
-  html += `</div>`;
+  html += `</div></div>`;
   return html;
 }
 
 // --- REPRODUCTOR ---
-let currentChannelId = null;
-let hlsInstance = null;
-
 function openPlayer(id) {
   currentChannelId = id;
-  currentView = "player";
-  render();
+  goTo('player');
 }
 
 function renderPlayer() {
   const c = data.channels.find(x => x.id === currentChannelId);
   const isFav = data.favorites.includes(c.id);
   
-  // Iniciar el video después de que se dibuje el HTML
   setTimeout(() => {
     const video = document.getElementById("videoPlayer");
     if (c.stream && video) {
@@ -172,7 +194,7 @@ function renderPlayer() {
 
   return `
     <div class="playerPage">
-      <button onclick="goTo('home')" style="background:none;border:none;color:var(--muted);margin-bottom:10px">← Volver</button>
+      <button class="back-btn" onclick="goTo('home')">← Volver al inicio</button>
       <div class="video-container">
         <video id="videoPlayer" controls playsinline></video>
       </div>
@@ -203,17 +225,24 @@ function renderAdmin() {
     <div class="admin">
       <h2>⚙️ Panel de Control</h2><br>
       <div class="adminCard">
-        <h3>➕ Agregar Canal</h3><br>
+        <h3>➕ Agregar Contenido</h3><br>
         <div class="form">
-          <input id="addName" placeholder="Nombre del canal (Ej: TV Pública)">
-          <input id="addLogo" placeholder="Emoji (Ej: 📺) o URL de imagen">
-          <input id="addStream" placeholder="URL del stream (.m3u8 o .mp4)">
+          <input id="addName" placeholder="Nombre del canal/película">
+          <select id="addCategory">
+            <option value="canales">📺 Canal en Vivo</option>
+            <option value="peliculas">🍿 Película</option>
+            <option value="series">🎬 Serie</option>
+            <option value="musica">🎵 Música</option>
+          </select>
+          <input id="addLogo" placeholder="Emoji (Ej: 🎬)">
+          <input id="addImage" placeholder="URL de imagen (opcional, reemplaza al emoji)">
+          <input id="addStream" placeholder="URL del video (.m3u8 o .mp4)">
           <input id="addDesc" placeholder="Descripción corta">
-          <button class="btn-green" onclick="addChannel()">Guardar Canal</button>
+          <button class="btn-green" onclick="addChannel()">Guardar Contenido</button>
         </div>
       </div>
       <div class="adminCard">
-        <h3>📋 Mis Canales</h3><br>
+        <h3>📋 Mi Contenido</h3><br>
         <div id="adminList"></div>
       </div>
     </div>
@@ -221,13 +250,13 @@ function renderAdmin() {
   
   setTimeout(() => {
     const list = document.getElementById("adminList");
-    if (data.channels.length === 0) list.innerHTML = "<p>No hay canales.</p>";
+    if (data.channels.length === 0) list.innerHTML = "<p>No hay contenido.</p>";
     
     data.channels.forEach(c => {
       list.innerHTML += `
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--line); padding:10px 0;">
           <div>
-            <strong>${c.name}</strong><br>
+            <strong>${c.name}</strong> <small>(${c.category})</small><br>
             <small style="color:var(--muted);word-break:break-all;">${c.stream || 'Sin URL'}</small>
           </div>
           <button class="btn-red" onclick="deleteChannel('${c.id}')">Borrar</button>
@@ -241,7 +270,9 @@ function renderAdmin() {
 
 function addChannel() {
   const name = document.getElementById("addName").value;
+  const category = document.getElementById("addCategory").value;
   const logo = document.getElementById("addLogo").value;
+  const image = document.getElementById("addImage").value;
   const stream = document.getElementById("addStream").value;
   const desc = document.getElementById("addDesc").value;
 
@@ -250,18 +281,19 @@ function addChannel() {
   data.channels.push({
     id: Date.now().toString(),
     name: name,
-    logo: logo || "📺",
+    category: category,
+    logo: logo || "🎬",
+    image: image,
     stream: stream,
     description: desc
   });
 
   save();
-  render();
-  alert("Canal agregado con éxito");
+  goTo('home'); // Te manda al inicio al guardar
 }
 
 function deleteChannel(id) {
-  if (!confirm("¿Borrar este canal?")) return;
+  if (!confirm("¿Borrar este contenido?")) return;
   data.channels = data.channels.filter(c => c.id !== id);
   data.favorites = data.favorites.filter(f => f !== id);
   save();
